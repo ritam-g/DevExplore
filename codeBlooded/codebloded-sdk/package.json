@@ -1,0 +1,13 @@
+{
+  "name": "codebloded-sdk",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "type": "module",
+  "description": "Incident reporting SDK by CodeBloded",
+  "keywords": ["incident", "monitoring", "sdk"],
+  "author": "Ritam",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}
