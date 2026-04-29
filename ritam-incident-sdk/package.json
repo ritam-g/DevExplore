@@ -1,0 +1,9 @@
+{
+  "name": "ritam-incident-sdk",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "description": "Simple incident reporting SDK",
+  "author": "Ritam",
+  "license": "MIT"
+}
