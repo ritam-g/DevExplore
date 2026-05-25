@@ -1,6 +1,8 @@
+require("dotenv").config();
 const bcrypt = require("bcrypt");
 const userModel = require("../models/user.schema.js");
 const { generateAccessToken, generateRefreshToken } = require("../utils/generateTokens.js");
+const jwt = require("jsonwebtoken");
 const registerService = async (userData, res) => {
     try {
         const { username, password, email } = userData;
@@ -14,13 +16,13 @@ const registerService = async (userData, res) => {
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new userModel({ username, password: hashedPassword, email });
-        
+
         // now token 
         const accessToken = generateAccessToken(newUser._id);
         const refreshToken = generateRefreshToken(newUser._id);
         newUser.refreshToken = refreshToken;
         await newUser.save();
-        
+
         return { newUser, accessToken, refreshToken };
     } catch (error) {
         throw new Error("Error registering user: " + error.message);
@@ -46,7 +48,26 @@ const loginService = async (userData, res) => {
     return { user, accessToken, refreshToken };
 }
 
+const getAcessTookenService = async (refreshToken) => {
+    try {
+        const decode=jwt.verify(refreshToken,process.env.JWT_SECRET_REFRESH);
+        if(!decode){
+            throw new Error("Invalid refresh token");
+        }
+        const userId=decode.id;
+        const user=await userModel.findById(userId);
+        if(!user || user.refreshToken !== refreshToken){
+            throw new Error("Invalid refresh token");
+        }
+        const newAccessToken=generateAccessToken(userId);
+        return newAccessToken;
+    }
+    catch (error) {
+        throw new Error("Error generating access token: " + error.message);
+    }
+}
 module.exports = {
     registerService,
     loginService,
+    getAcessTookenService
 }

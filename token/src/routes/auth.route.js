@@ -10,4 +10,6 @@ authRouter.post("/register", authController.registerController);
 
 authRouter.post("/login", authController.loginController);
 
+authRouter.get("/refresh-token", authController.refreshTokenController)
+
 module.exports = authRouter;

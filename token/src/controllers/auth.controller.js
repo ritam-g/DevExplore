@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { registerService , loginService } = require("../services/auth.service.js");
+const { registerService , loginService, getAcessTookenService } = require("../services/auth.service.js");
 async function registerController(req, res) {
 
 
@@ -42,13 +42,34 @@ async function loginController(req, res) {
     return res.status(200).json({
         message: "User logged in successfully",
         accessToken,
-        refreshToken
+        refreshToken,
+        user
     });
 
+}
+
+async function refreshTokenController(req,res){
+    const refreshToken=req.cookies.refreshToken;
+    if(!refreshToken){
+        return res.status(401).json({message:"Refresh token not found"});
+    }
+    try{
+        const newAccessToken=await getAcessTookenService(refreshToken);
+        res.cookie("accessToken", newAccessToken,
+            {
+                httpOnly: true, secure: true,
+                maxAge: 10 * 60 * 1000, // 10 minutes
+            });
+        return res.status(200).json({message:"Access token refreshed successfully", accessToken: newAccessToken});
+    }
+    catch(error){
+        return res.status(403).json({message:"Invalid refresh token"});
+    }
 }
 
 module.exports = {
     registerController,
     loginController,
+    refreshTokenController
 }
 
