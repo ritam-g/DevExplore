@@ -11,7 +11,7 @@ import Home from '../pages/Home'
 const AppRoutes = createBrowserRouter([
     {
         path: "/",
-        element: <Public />,
+        element: <Public />, //! if user is ther then it will redirect to /home
         children: [
             {
                 path: "",
@@ -32,7 +32,7 @@ const AppRoutes = createBrowserRouter([
     },
     {
         path: "/home",
-        element: <ProctedRoute />,
+        element: <ProctedRoute />, //! if !user then return to login page ok  
         children: [{
             path: "",
             element: <MainLayout />,

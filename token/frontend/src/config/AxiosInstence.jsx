@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const AxiosInstance = axios.create({
-    baseURL: "https://jsonplaceholder.typicode.com/todos"
+    baseURL: "http://localhost:3000",
+    withCredentials: true
 })
 
 AxiosInstance.interceptors.request.use()

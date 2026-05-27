@@ -3,9 +3,10 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router";
 import { addUser } from "../state/authReducer";
+import UseAuth from "../hooks/UseAuth";
 
 const Login = () => {
-    const { register, handleSubmit } = useForm()
+   const { handleSubmit, register, errors ,onLogin} = UseAuth()
     const dispatch = useDispatch()
     return (
         <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
@@ -22,12 +23,7 @@ const Login = () => {
 
                 <form
                     onSubmit={
-                        handleSubmit(data => {
-                            console.log('====================================');
-                            console.log(data);
-                            console.log('====================================');
-                            dispatch(addUser(data))
-                        })
+                        handleSubmit(onLogin)
                     }
                     className="mt-8 space-y-5">
 
@@ -43,6 +39,7 @@ const Login = () => {
                             {...register("email")}
                             className="w-full px-4 py-3 rounded-lg bg-zinc-800 border border-zinc-700 text-white outline-none focus:border-blue-500"
                         />
+                        {errors.email && <span className="text-red-500">{errors.email.message}</span>}
                     </div>
 
                     <div>
@@ -56,6 +53,7 @@ const Login = () => {
                             placeholder="Enter your password"
                             className="w-full px-4 py-3 rounded-lg bg-zinc-800 border border-zinc-700 text-white outline-none focus:border-blue-500"
                         />
+                        {errors.password && <span className="text-red-500">{errors.password.message}</span>}
                     </div>
 
                     <button

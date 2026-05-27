@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router";
-import { useForm } from "react-hook-form"
+import UseAuth from "../hooks/UseAuth";
 const Register = () => {
-    const { register, handleSubmit } = useForm()
+    const { onRegister, handleSubmit, errors,  register } = UseAuth()
 
     return (
         <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
@@ -18,9 +18,7 @@ const Register = () => {
                 </p>
 
                 <form
-                    onSubmit={handleSubmit((data) => {
-                        console.log(data)
-                    })}
+                    onSubmit={handleSubmit(onRegister)}
                     className="mt-8 space-y-5">
 
                     <div>
@@ -34,6 +32,7 @@ const Register = () => {
                             {...register("username")}
                             className="w-full px-4 py-3 rounded-lg bg-zinc-800 border border-zinc-700 text-white outline-none focus:border-blue-500"
                         />
+                        {errors.username && <p>{errors.username.message}</p>}
                     </div>
 
                     <div>
@@ -47,6 +46,7 @@ const Register = () => {
                             placeholder="Enter your email"
                             className="w-full px-4 py-3 rounded-lg bg-zinc-800 border border-zinc-700 text-white outline-none focus:border-blue-500"
                         />
+                        {errors.email && <p>{errors.email.message}</p>}
                     </div>
 
                     <div>
@@ -60,6 +60,7 @@ const Register = () => {
                             placeholder="Create password"
                             className="w-full px-4 py-3 rounded-lg bg-zinc-800 border border-zinc-700 text-white outline-none focus:border-blue-500"
                         />
+                        {errors.password && <p>{errors.password.message}</p>}
                     </div>
 
                     <button

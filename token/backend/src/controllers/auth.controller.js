@@ -4,7 +4,7 @@ async function registerController(req, res) {
 
 
     const userData = req.body;
-    const { newUser, accessToken, refreshToken } = await registerService(userData, res);
+    const { newUser, accessToken, refreshToken } = await registerService(userData);
    
 
     res.cookie("accessToken", accessToken,
@@ -27,7 +27,7 @@ async function registerController(req, res) {
 }
 async function loginController(req, res) {
     const userData = req.body;
-    const { user, accessToken, refreshToken } = await loginService(userData, res);
+    const { user, accessToken, refreshToken } = await loginService(userData);
     res.cookie("accessToken", accessToken,
         {
             httpOnly: true, secure: true,

@@ -3,16 +3,16 @@ const bcrypt = require("bcrypt");
 const userModel = require("../models/user.schema.js");
 const { generateAccessToken, generateRefreshToken } = require("../utils/generateTokens.js");
 const jwt = require("jsonwebtoken");
-const registerService = async (userData, res) => {
+const registerService = async (userData) => {
     try {
         const { username, password, email } = userData;
         if (!username || !password || !email) {
-            return res.status(400).json({ message: "All fields are required" });
+            throw new Error("Username, password, and email are required");
         }
 
         const isUserExist = await userModel.findOne({ email });
         if (isUserExist) {
-            return res.status(400).json({ message: "User already exists" });
+            throw new Error("User already exists");
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new userModel({ username, password: hashedPassword, email });
@@ -28,18 +28,18 @@ const registerService = async (userData, res) => {
         throw new Error("Error registering user: " + error.message);
     }
 }
-const loginService = async (userData, res) => {
+const loginService = async (userData) => {
     const { email, password } = userData;
     if (!email || !password) {
-        return res.status(400).json({ message: "All fields are required" });
+        throw new Error("Email and password are required");
     }
     const user = await userModel.findOne({ email });
     if (!user) {
-        return res.status(400).json({ message: "Invalid credentials" });
+        throw new Error("User not found");
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-        return res.status(400).json({ message: "Invalid credentials" });
+        throw new Error("Invalid password");
     }
     const accessToken = generateAccessToken(user._id);
     const refreshToken = generateRefreshToken(user._id);
