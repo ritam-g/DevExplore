@@ -3,12 +3,15 @@ import { useSelector } from 'react-redux'
 import { Navigate, Outlet } from 'react-router'
 
 const ProctedRoute = () => {
- const user = useSelector(state => state.auth.user)
+  const user = useSelector(state => state.auth.user)
+  const isLoading = useSelector(state => state.auth.isLoading)
 
- if(!user) return <Navigate to="/" />
+  if(isLoading) return <h1>Loading...</h1>
+  
+  if (!user) return <Navigate to="/" />
   return (
     <div>
-      <Outlet/>
+      <Outlet />
     </div>
   )
 }

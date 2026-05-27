@@ -10,10 +10,17 @@ const authSlice=createSlice({
         addUser:(state,action)=>{
             state.user=action.payload
             state.isLoading=false
+        },
+        setLodading:(state,action)=>{
+            state.isLoading=action.payload
+        },
+        removeUser:(state)=>{
+            state.user=null
+            state.isLoading=false
         }
     }
 })
 
-export const {addUser}=authSlice.actions
+export const {addUser,setLodading ,removeUser}=authSlice.actions
 export default authSlice.reducer
 

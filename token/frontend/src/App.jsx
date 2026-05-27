@@ -1,24 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import AxiosInstance from './config/AxiosInstence.jsx';
-import {useState} from "react"
+import { RouterProvider } from 'react-router';
+import AppRoutes from './routes/AppRoutes.jsx';
+import { useDispatch, useSelector } from 'react-redux';
+import { addUser, removeUser, setLodading } from './state/authReducer.jsx';
 const App = () => {
-  const [data, setData] = useState(1);
-  const fetchData = async () => {
-    try {
-      const response = await AxiosInstance.get(`/${data}`);
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  const dispatch = useDispatch()
+  const isLoading = useSelector(state => state.auth.isLoading)
+  useEffect(() => {
+    (async () => {
+      try {
+        dispatch(setLodading(true))
+        const res = await AxiosInstance.get('/auth/me')
+        dispatch(addUser(res.data.user))
+      } catch (error) {
+        console.log("====================================",error);
+        dispatch(removeUser())
+      }
+
+    })()
+  }, [])
   return (
     <>
-      <button onClick={fetchData}>Fetch Data</button>
-      <input
-        type="number"
-        value={data}
-        onChange={(e) => setData(parseInt(e.target.value))}
-      />
+
+      <RouterProvider router={AppRoutes} />
     </>
   )
 }
